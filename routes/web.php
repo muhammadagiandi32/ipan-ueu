@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\bill\BillController;
+use App\Http\Controllers\student\StudentController;
+use App\Models\Bill;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +19,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+// Student
+Route::resource('student', StudentController::class);
+
+// Bill
+Route::resource('bill', BillController::class);
