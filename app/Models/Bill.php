@@ -10,4 +10,9 @@ class Bill extends Model
     use HasFactory;
     protected $fillable = [];
     protected $primaryKey = 'id_bill';
+
+    public function student()
+    {
+        return $this->HasMany(Student::class, 'id_students', 'students_id');
+    }
 }

@@ -248,8 +248,8 @@
                 </h3>
                 <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                     title="" data-bs-original-title="Click to add a user">
-                    <a href="#" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_invite_friends">
+                    <a href="javascript:void(0)" id="createNew" class="btn btn-sm btn-light btn-active-primary"
+                        data-bs-toggle="modal" data-bs-target="#kt_modal_invite_friends">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
                         <span class="svg-icon svg-icon-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -269,22 +269,21 @@
                 <!--begin::Table container-->
                 <div class="table-responsive">
                     <!--begin::Table-->
-                    <form id="form_payment">
+                    <form id="form_payment" method="POST" action="{{ url('/snaptoken') }}">
                         <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 data-table">
                             <!--begin::Table head-->
                             <thead>
                                 <tr class="fw-bolder text-muted">
-                                    <th class="w-25px">
+                                    {{-- <th class="w-25px">
                                         <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                            <input class="form-check-input" id="check_id" type="checkbox" value="1"
+                                            <input class="form-check-input" type="checkbox" value="1"
                                                 data-kt-check="true" data-kt-check-target=".widget-9-check">
                                         </div>
-                                    </th>
+                                    </th> --}}
                                     <th class="min-w-200px">Name</th>
                                     <th class="min-w-200px">NIS & Class </th>
-                                    <th class="min-w-200px">Total</th>
-                                    <th class="min-w-200px text-start">Email & Number Phone</th>
-                                    <th class="min-w-200px text-start">DOB</th>
+                                    <th class="min-w-150px">Email & Number Phone</th>
+                                    <th class="min-w-150px text-end">DOB</th>
                                     <th class="min-w-100px text-end">Actions</th>
                                 </tr>
                             </thead>
@@ -390,8 +389,8 @@
                             <!--end::Table body-->
                         </table>
                         <!--end::Table-->
-                        <button type="submit" class="btn btn-primary btn-sm mb-5 text-end" id="pay">Pay
-                            Now</button>
+                        {{-- <button type="submit" class="btn btn-primary btn-sm mb-5 text-end" id="pay">Pay
+                            Now</button> --}}
                     </form>
                 </div>
                 <!--end::Table container-->
@@ -401,6 +400,53 @@
         <!--end::Tables Widget 9-->
     </div>
     <!--end::Col-->
+</div>
+
+<div class="modal fade" id="ajaxModel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modelHeading"></h4>
+            </div>
+            <div class="modal-body">
+                <form id="dataForm" name="dataForm" class="form-horizontal">
+                    <input type="hidden" name="ItemId" id="ItemId">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">Item Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="ItemName" name="ItemName"
+                                placeholder="Enter Uom" value="" maxlength="50" required="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">Item Group</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control select" id="ItemGroup" name="ItemGroup"
+                                placeholder="Enter Uom" value="" maxlength="50" required="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">Uom</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control select" id="UomId" name="UomId"
+                                placeholder="Enter Uom" value="" maxlength="50" required="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">Type Item</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control select" id="TypeItem" name="TypeItem"
+                                placeholder="Enter Uom" value="" maxlength="50" required="">
+                        </div>
+                    </div>
+                    <div class="col-sm-offset-2 col-sm-10 mt-3">
+                        <button type="submit" class="btn btn-primary" id="saveBtn" value="create">
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {{--
 <script>
@@ -435,9 +481,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css"
     integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
-
-{{-- midrans --}}
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('APP_CLIENT_KEY') }}"></script>
 <script type="text/javascript">
     $(function () {
         $.ajaxSetup({
@@ -451,75 +494,21 @@
             ajax: "{{ route('bill.index') }}",
             
             columns: [
-                {data:'check', name:'check',orderable: false, searchable: false},
-                {data: 'name' , name:'name' },
+                
+                {data: 'name' , name:'user.name' },
                 {data: 'nis' , name:'nis'  },
-                {data: 'total' , name:'total'  },
-                {data: 'email' , name:'email'  },
+                {data: 'email' , name:'user.email'  },
                 {data: 'dob' , name:'dob'  },
-                {data: 'action',  name:'action',   orderable: false, searchable: false},
+
+                // {data: 'user', name:'user.email'},
+                // {data: 'user', name:'user.email'},
+                // {data: 'user', name:'user.email'},
+                // {data: 'TypeItems',   name:'TypeItems.TypeName'},
+                // {data: 'Users',       name:'Users.name'},
+                {data: 'action',     orderable: false, searchable: false},
             ]
         });
-        // console.log(table);
-        $('#check_id').click(function(){
-            $('.data-table tbody').on('change', 'input[type="checkbox"]', function(){
-                if(!this.checked){
-                    var el = $('#select-all').get(0);           
-                    if(el && el.checked && ('indeterminate' in el)){
-                        el.indeterminate = true;
-                    }
-                }
-            })
-        });
-        $('#pay').click(function (e) {
-            e.preventDefault();
-            // console.log($('#form_payment').serialize());
-            // $(this).html('Save');
-                $.ajax({
-                data: $('#form_payment').serialize(),
-                url: "{{ route('payment.store') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    snap.pay(data.snapToken, {
-                    // Optional
-                    onSuccess: function(result){
-                        // /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                    },
-                    // Optional
-                    onPending: function(result){
-                        // /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                    },
-                    // Optional
-                    onError: function(result){
-                        // /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                    }
-                    });
-                    // if(data.status == 200){
-                    //     $('#dataForm').trigger("reset");
-                    //     $('#ajaxModel').modal('hide');
-                    //     table.draw();
-                    //     // alert('Data saved successfully');
-                    //     Swal.fire(
-                    //         'Succes',
-                    //         'Your Data Hasben Created !!',
-                    //         'success'
-                    //     );
-                    // }
-                
-                },
-                error: function (data) {
-                    console.log('Error:', data);
-                    // $('#saveBtn').html('Save Changes');
-                    // Swal.fire(
-                    //     'Filed is Reuired',
-                    //     'That thing is still around?',
-                    //     'error'
-                    // );
-                }
-            });
-        });
+        console.log(table);
         $('#createNew').click(function () {
         //   console.log('kontol')
             $('#saveBtn').html("Submit");
