@@ -13,13 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
-            $table->bigInteger('id_payment');
-            $table->string('payment_method');
-            $table->integer('order_id');
-            $table->string('name');
-            $table->string('phone');
-            $table->decimal('total',8,2);
+        Schema::create('materis', function (Blueprint $table) {
+            $table->bigInteger('id_materi');
+            $table->string('url_video');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('materis');
     }
 };
