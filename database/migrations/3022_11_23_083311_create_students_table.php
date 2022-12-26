@@ -23,9 +23,11 @@ return new class extends Migration
             $table->char('address');
             $table->date('dob');
             $table->string('no_hp_guardian');
+            $table->unsignedBigInteger('kelas_id');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('kelas_id')->references('id_kelas')->on('kelas');
         });
     }
 

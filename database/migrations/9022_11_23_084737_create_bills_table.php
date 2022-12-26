@@ -18,10 +18,11 @@ return new class extends Migration
             $table->unsignedBigInteger('students_id');
             $table->date('month_bill');
             $table->decimal('total', $precision = 8, $scale = 2);
-            $table->unsignedBigInteger('paymant_id')->nullable();
+            $table->unsignedBigInteger('payment_id')->nullable();
             $table->timestamps();
 
             $table->foreign('students_id')->references('id_students')->on('students');
+            $table->foreign('payment_id')->references('id_payment')->on('payments');
         });
     }
 
